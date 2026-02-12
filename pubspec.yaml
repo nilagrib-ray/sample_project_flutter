@@ -1,0 +1,55 @@
+name: sample_project_flutter
+description: "Party Hard Travel - Flutter App"
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.10.8
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+
+  # HTTP / Networking
+  dio: ^5.7.0
+
+  # State Management
+  provider: ^6.1.2
+
+  # Dependency Injection
+  get_it: ^8.0.3
+
+  # Navigation
+  go_router: ^14.8.1
+
+  # Local Storage
+  shared_preferences: ^2.3.4
+
+  # Image Loading
+  cached_network_image: ^3.4.1
+
+  # Google Maps
+  google_maps_flutter: ^2.10.0
+
+  # JSON Serialization
+  json_annotation: ^4.9.0
+
+  # Font Awesome / Icons
+  font_awesome_flutter: ^10.8.0
+
+  # Date formatting
+  intl: ^0.19.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/icons/
