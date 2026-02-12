@@ -1,3 +1,6 @@
+/// Represents a trip in the app. Used when listing trips (e.g. on the home
+/// screen). Fields like images and location are optional (?) because the API
+/// may not always return them.
 class TripDomain {
   final String tripId;
   final int? packageId;
@@ -40,6 +43,9 @@ class TripDomain {
   });
 }
 
+/// Represents a category of destinations (e.g. "Beach", "Adventure"). Used to
+/// group or filter destinations in the app. All fields are required since a
+/// category isn't useful without this info.
 class DestinationCategory {
   final int categoryId;
   final String categoryName;

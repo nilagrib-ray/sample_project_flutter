@@ -99,11 +99,11 @@ class UpcomingTripCard extends StatelessWidget {
                     height: 240,
                     width: double.infinity,
                     fit: BoxFit.cover,
-                    placeholder: (_, __) => Container(
+                    placeholder: (_, _) => Container(
                       height: 240,
                       color: const Color(0xFFE0E0E0),
                     ),
-                    errorWidget: (_, __, ___) => Container(
+                    errorWidget: (_, _, _) => Container(
                       height: 240,
                       color: const Color(0xFFE0E0E0),
                       child: const Icon(Icons.image, size: 48),
@@ -253,25 +253,27 @@ class DestinationCard extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: CachedNetworkImage(
-                    imageUrl: destination.imageUrl.isNotEmpty
-                        ? destination.imageUrl
-                        : destination.squareImageUrl,
-                    height: 200,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                    placeholder: (_, __) =>
-                        Container(height: 200, color: const Color(0xFFE0E0E0)),
-                    errorWidget: (_, __, ___) => Container(
-                      height: 200,
-                      color: const Color(0xFFE0E0E0),
-                      child: const Icon(Icons.image),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: CachedNetworkImage(
+                      imageUrl: destination.imageUrl.isNotEmpty
+                          ? destination.imageUrl
+                          : destination.squareImageUrl,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                      placeholder: (_, _) =>
+                          Container(color: const Color(0xFFE0E0E0)),
+                      errorWidget: (_, _, _) => Container(
+                        color: const Color(0xFFE0E0E0),
+                        child: const Icon(Icons.image),
+                      ),
                     ),
                   ),
                 ),

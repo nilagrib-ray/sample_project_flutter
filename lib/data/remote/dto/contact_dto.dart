@@ -1,3 +1,7 @@
+// DTOs for contacts API. RepsData uses _parseStringMap to handle JSON maps
+// whose keys may be numbers or strings.
+
+/// Contact info for a booking: emergency numbers, meeting point, reps.
 class ContactsResponse {
   final int? id;
   final int? bookingId;
@@ -57,6 +61,7 @@ class ContactsResponse {
   }
 }
 
+/// Meeting point location with address and coordinates.
 class ContactMeetingPoint {
   final String? address;
   final double? lat;
@@ -107,6 +112,7 @@ class ContactMeetingPoint {
   }
 }
 
+/// Rep (representative) data: maps of rep ID -> first name, last name, phone, etc.
 class RepsData {
   final Map<String, String>? repsFirstName;
   final Map<String, String>? repsLastName;
@@ -132,6 +138,8 @@ class RepsData {
     );
   }
 
+  /// Converts a JSON map to `Map<String, String>`. JSON keys can be numbers
+  /// (e.g. rep ID 1, 2) but we need String keys. Converts both keys and values.
   static Map<String, String>? _parseStringMap(dynamic value) {
     if (value == null) return null;
     if (value is Map) {
@@ -141,6 +149,7 @@ class RepsData {
   }
 }
 
+/// WhatsApp business number for the trip/booking.
 class WhatsAppNumberResponse {
   final String? whatsappNumber;
   final String? countryCode;

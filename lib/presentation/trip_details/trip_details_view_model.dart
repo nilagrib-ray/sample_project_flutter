@@ -6,6 +6,7 @@ import '../../domain/model/trip_details_domain.dart';
 import '../../domain/usecase/get_itinerary_usecase.dart';
 import '../../domain/usecase/get_trip_details_usecase.dart';
 
+/// UiState: An immutable snapshot of everything the Trip Details screen needs to display.
 class TripDetailsUiState {
   final bool isLoading;
   final String tripName;
@@ -63,6 +64,7 @@ class TripDetailsUiState {
     this.meetingPointDetails,
   });
 
+  /// copyWith: Creates a new copy of the state with some fields changed.
   TripDetailsUiState copyWith({
     bool? isLoading,
     String? tripName,
@@ -123,6 +125,7 @@ class TripDetailsUiState {
   }
 }
 
+/// ChangeNotifier: Tells the UI to rebuild when data changes.
 class TripDetailsViewModel extends ChangeNotifier {
   final GetTripDetailsUseCase _getTripDetailsUseCase;
   final GetItineraryUseCase _getItineraryUseCase;
@@ -136,6 +139,7 @@ class TripDetailsViewModel extends ChangeNotifier {
   TripDetailsUiState _uiState = const TripDetailsUiState();
   TripDetailsUiState get uiState => _uiState;
 
+  /// loadTripDetails: Loads trip info first, then itinerary if booking ID exists.
   Future<void> loadTripDetails(
       int? packageId, int? bookingId, String? orderId) async {
     await for (final resource in _getTripDetailsUseCase(
@@ -153,6 +157,7 @@ class TripDetailsViewModel extends ChangeNotifier {
           developer.log('Trip details loaded: ${data.tripName}',
               name: 'TripDetailsViewModel');
 
+          // _calculateTimeToGo returns a Dart record: (int, int, int) = (days, hours, minutes)
           final countdown = _calculateTimeToGo(data.arrivalDate);
 
           final bookingNumDisplay = () {
@@ -194,7 +199,7 @@ class TripDetailsViewModel extends ChangeNotifier {
           );
           notifyListeners();
 
-          // Load itinerary if booking ID is available
+          // Load itinerary next if we have a valid booking ID
           if (data.bookingId != null && data.bookingId! > 0) {
             _loadItinerary(data.bookingId!);
           }
@@ -211,6 +216,8 @@ class TripDetailsViewModel extends ChangeNotifier {
     }
   }
 
+  /// _loadItinerary: Loads today's events for the trip. Uses DateFormat to get today's date.
+  /// DateFormat('yyyy-MM-dd') formats dates like "2025-02-13".
   Future<void> _loadItinerary(int bookingId) async {
     _uiState = _uiState.copyWith(isLoadingItinerary: true);
     notifyListeners();
@@ -245,6 +252,8 @@ class TripDetailsViewModel extends ChangeNotifier {
     }
   }
 
+  /// _calculateTimeToGo: Returns a Dart record (tuple)—(days, hours, minutes).
+  /// Records let you return multiple values: countdown.$1, countdown.$2, countdown.$3.
   (int, int, int) _calculateTimeToGo(String dateString) {
     try {
       if (dateString.isEmpty) return (0, 0, 0);

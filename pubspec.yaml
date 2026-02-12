@@ -1,55 +1,78 @@
+# pubspec.yaml: project configuration file for Flutter/Dart.
+# Similar to package.json in JavaScript/Node: it lists dependencies, scripts,
+# and project metadata. Run "flutter pub get" to download dependencies.
+
 name: sample_project_flutter
 description: "Party Hard Travel - Flutter App"
 publish_to: 'none'
 
 version: 1.0.0+1
 
+# Minimum Dart SDK version required. ^3.10.8 means 3.10.8 or higher.
 environment:
   sdk: ^3.10.8
 
+# dependencies: packages used when the app runs. They are bundled into the final app.
 dependencies:
   flutter:
     sdk: flutter
 
+  # Built-in icons for Material and Cupertino (iOS-style) widgets.
   cupertino_icons: ^1.0.8
 
-  # HTTP / Networking
+  # dio: HTTP client for making API requests (GET, POST, etc.). Handles JSON,
+  # timeouts, interceptors, and error handling. Like axios or fetch in web dev.
   dio: ^5.7.0
 
-  # State Management
+  # provider: state management. Lets widgets listen to data changes and rebuild
+  # when something updates. Used for ViewModels and sharing data across screens.
   provider: ^6.1.2
 
-  # Dependency Injection
+  # get_it: dependency injection. Registers services (repositories, ViewModels)
+  # in one place. Get them anywhere with getIt<Service>(). Avoids passing
+  # objects through many layers.
   get_it: ^8.0.3
 
-  # Navigation
+  # go_router: declarative routing. Define paths like /login, /messages, and
+  # the router shows the right screen. Supports deep linking and nested routes.
   go_router: ^14.8.1
 
-  # Local Storage
+  # shared_preferences: simple key-value storage (like localStorage in web).
+  # Saves small data like user tokens, settings, or login state.
   shared_preferences: ^2.3.4
 
-  # Image Loading
+  # cached_network_image: loads images from URLs and caches them. Reuses cached
+  # images so they don't reload every time. Shows a placeholder while loading.
   cached_network_image: ^3.4.1
 
-  # Google Maps
+  # google_maps_flutter: shows Google Maps in the app. Used for displaying
+  # maps, markers, and location-based features.
   google_maps_flutter: ^2.10.0
 
-  # JSON Serialization
+  # json_annotation: generates JSON serialization code. Add @JsonSerializable()
+  # to classes and run a code generator to create fromJson/toJson automatically.
   json_annotation: ^4.9.0
 
-  # Font Awesome / Icons
+  # font_awesome_flutter: extra icons (brand logos, social icons, etc.)
+  # beyond the default Material icons.
   font_awesome_flutter: ^10.8.0
 
-  # Date formatting
+  # intl: internationalization and formatting. Formats dates, numbers, and
+  # currencies according to the user's locale (e.g. "Jan 15, 2025" vs "15/01/2025").
   intl: ^0.19.0
 
+# dev_dependencies: only used during development (testing, linting, code gen).
+# NOT included in the final app that users install.
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  # flutter_lints: suggested lint rules to catch common mistakes and style issues.
   flutter_lints: ^6.0.0
 
+# flutter section: Flutter-specific configuration.
 flutter:
   uses-material-design: true
-
+  # assets: lists asset folders (images, fonts, etc.) that the app can load.
+  # Files in these folders are bundled with the app.
   assets:
     - assets/icons/

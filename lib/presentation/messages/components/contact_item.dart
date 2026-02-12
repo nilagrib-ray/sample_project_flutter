@@ -3,6 +3,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../domain/model/contact_domain.dart';
 
+/// A row showing a contact's avatar, name, pronouns, and a WhatsApp icon.
+/// Used to display a regular contact in the messages screen.
 class ContactItem extends StatelessWidget {
   final ContactDomain contact;
 
@@ -14,18 +16,19 @@ class ContactItem extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       child: Row(
         children: [
+          // ClipOval crops the image into a circle
           ClipOval(
             child: CachedNetworkImage(
               imageUrl: contact.imageUrl ?? 'https://via.placeholder.com/150',
               width: 56,
               height: 56,
               fit: BoxFit.cover,
-              placeholder: (_, __) => Container(
+              placeholder: (_, _) => Container(
                 width: 56,
                 height: 56,
                 color: const Color(0xFFE0E0E0),
               ),
-              errorWidget: (_, __, ___) => Container(
+              errorWidget: (_, _, _) => Container(
                 width: 56,
                 height: 56,
                 color: const Color(0xFFE0E0E0),
@@ -34,6 +37,7 @@ class ContactItem extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 16),
+          // Expanded lets the name/pronouns take up remaining space in the row
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,6 +61,7 @@ class ContactItem extends StatelessWidget {
               ],
             ),
           ),
+          // FaIcon uses Font Awesome icons (e.g. WhatsApp brand icon)
           const FaIcon(
             FontAwesomeIcons.whatsapp,
             color: Colors.black,
@@ -68,6 +73,8 @@ class ContactItem extends StatelessWidget {
   }
 }
 
+/// A black card prompting the user to "Send a Flare" when they need help.
+/// Tappable via InkWell (shows ripple effect on tap).
 class SendFlareCard extends StatelessWidget {
   const SendFlareCard({super.key});
 
@@ -121,6 +128,8 @@ class SendFlareCard extends StatelessWidget {
   }
 }
 
+/// A row for emergency/key contacts showing name, subtitle, and icon.
+/// Shows WhatsApp icon if contact uses WhatsApp, otherwise phone icon.
 class KeyContactItem extends StatelessWidget {
   final KeyContact contact;
 

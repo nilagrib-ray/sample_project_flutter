@@ -6,6 +6,7 @@ import '../../domain/repository/auth_repository.dart';
 import '../../domain/usecase/get_destinations_usecase.dart';
 import '../../domain/usecase/get_trips_usecase.dart';
 
+/// UiState: An immutable snapshot of everything the Trips screen needs to display.
 class TripsUiState {
   final bool isLoading;
   final List<TripDomain> upcomingTrips;
@@ -21,6 +22,7 @@ class TripsUiState {
     this.errorMessage,
   });
 
+  /// copyWith: Creates a new copy of the state with some fields changed.
   TripsUiState copyWith({
     bool? isLoading,
     List<TripDomain>? upcomingTrips,
@@ -39,11 +41,14 @@ class TripsUiState {
   }
 }
 
+/// ChangeNotifier: Tells the UI to rebuild when data changes.
 class TripsViewModel extends ChangeNotifier {
   final GetTripsUseCase _getTripsUseCase;
   final GetDestinationsUseCase _getDestinationsUseCase;
   final AuthRepository _authRepository;
 
+  /// Constructor body in { }: Code that runs right when the ViewModel is created.
+  /// Here we load trips and destinations immediately.
   TripsViewModel({
     required GetTripsUseCase getTripsUseCase,
     required GetDestinationsUseCase getDestinationsUseCase,
@@ -69,6 +74,7 @@ class TripsViewModel extends ChangeNotifier {
         case ResourceSuccess(:final data):
           developer.log('Trips loaded successfully: ${data.length}',
               name: 'TripsViewModel');
+          // Split trips: _isUpcoming returns true if start date is in the future
           _uiState = _uiState.copyWith(
             isLoading: false,
             upcomingTrips: data.where((t) => _isUpcoming(t.startDate)).toList(),
@@ -110,6 +116,8 @@ class TripsViewModel extends ChangeNotifier {
     developer.log('User logged out successfully', name: 'TripsViewModel');
   }
 
+  /// _isUpcoming: Returns true if the trip's start date is after now (future trips).
+  /// Trips in the past go to previousTrips; upcoming ones go to upcomingTrips.
   bool _isUpcoming(String dateString) {
     try {
       final tripDate = DateTime.parse(dateString);

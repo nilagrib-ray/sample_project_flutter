@@ -20,15 +20,20 @@ import '../presentation/profile/profile_view_model.dart';
 import '../presentation/trip_details/trip_details_view_model.dart';
 import '../presentation/trips/trips_view_model.dart';
 
+/// GetIt is a service locator - a central place that creates and stores objects.
+/// Instead of ClassA creating its own ClassB, we ask GetIt for ClassB. That's Dependency Injection (DI).
 final getIt = GetIt.instance;
 
-/// Initializes all dependencies similar to Hilt modules.
+/// Registers all app dependencies. Call this at app startup.
+/// Order matters: register things before other things that depend on them.
 void setupServiceLocator() {
   // ── Core / Network ──────────────────────────────────────────────
+  // registerLazySingleton: create once, reuse forever. Good for ApiService, PreferencesManager.
   getIt.registerLazySingleton<ApiService>(() => ApiService());
   getIt.registerLazySingleton<PreferencesManager>(() => PreferencesManager());
 
   // ── Repositories ────────────────────────────────────────────────
+  // Repositories need ApiService/PreferencesManager, so we get them from GetIt.
   getIt.registerLazySingleton<AuthRepository>(
     () => AuthRepositoryImpl(
       apiService: getIt<ApiService>(),
@@ -45,6 +50,8 @@ void setupServiceLocator() {
   );
 
   // ── Use Cases ───────────────────────────────────────────────────
+  // registerFactory: create a new instance every time getIt<LoginUseCase>() is called.
+  // Use for ViewModels and UseCases that should be fresh per screen.
   getIt.registerFactory<LoginUseCase>(
     () => LoginUseCase(repository: getIt<AuthRepository>()),
   );

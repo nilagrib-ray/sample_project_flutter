@@ -1,3 +1,5 @@
+/// A single contact (e.g. a reps or support person). [imageUrl] is optional
+/// because they may not have a profile photo.
 class ContactDomain {
   final String id;
   final String firstName;
@@ -18,6 +20,9 @@ class ContactDomain {
   });
 }
 
+/// All contacts for a destination: reps, emergency numbers, meeting point info.
+/// Used when showing the contacts screen for a trip. Most fields are optional
+/// because different destinations may have different contact info available.
 class ContactsDomain {
   final String destinationName;
   final String? destinationImage;
@@ -40,6 +45,9 @@ class ContactsDomain {
   });
 }
 
+/// A key contact shown in a compact way (e.g. name + subtitle). [isWhatsApp]
+/// indicates if the contact info is a WhatsApp number. [contactInfo] is optional
+/// since sometimes we just show name and subtitle.
 class KeyContact {
   final String name;
   final String subtitle;

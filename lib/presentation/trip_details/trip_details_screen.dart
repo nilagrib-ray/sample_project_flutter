@@ -72,10 +72,10 @@ class _TripDetailsScreenState extends State<TripDetailsScreen> {
                                   height: 260,
                                   width: double.infinity,
                                   fit: BoxFit.cover,
-                                  placeholder: (_, __) => Container(
+                                  placeholder: (_, _) => Container(
                                     color: const Color(0xFFE0E0E0),
                                   ),
-                                  errorWidget: (_, __, ___) => Container(
+                                  errorWidget: (_, _, _) => Container(
                                     color: const Color(0xFFE0E0E0),
                                     child: const Icon(Icons.image, size: 48),
                                   ),

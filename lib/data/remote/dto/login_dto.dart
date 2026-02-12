@@ -1,15 +1,23 @@
+// DTOs (Data Transfer Objects) are classes that match the structure of JSON
+// data sent or received from the server. They let us work with structured
+// objects instead of raw JSON maps.
+
+/// Request body sent when the user logs in (email + password).
 class LoginRequest {
   final String userEmail;
   final String password;
 
   const LoginRequest({required this.userEmail, required this.password});
 
+  /// Converts this object to a JSON map for sending to the server.
+  /// Keys use snake_case to match the API (e.g. 'user_email').
   Map<String, dynamic> toJson() => {
         'user_email': userEmail,
         'password': password,
       };
 }
 
+/// Response from the login API containing user info and auth token.
 class LoginResponse {
   final int userId;
   final String username;
@@ -33,6 +41,9 @@ class LoginResponse {
     required this.userType,
   });
 
+  /// Factory constructor: creates a LoginResponse from a JSON map.
+  /// Used when we receive data from the server and need to turn it into an object.
+  /// The ?? operator provides a default value when the JSON field is null.
   factory LoginResponse.fromJson(Map<String, dynamic> json) {
     return LoginResponse(
       userId: json['user_id'] as int? ?? 0,
@@ -48,6 +59,7 @@ class LoginResponse {
   }
 }
 
+/// User data stored locally after login (user info + token for API calls).
 class UserDataDto {
   final String userId;
   final String userType;
@@ -69,6 +81,7 @@ class UserDataDto {
     this.profileImage,
   });
 
+  /// Creates UserDataDto from JSON (e.g. when loading from local storage).
   factory UserDataDto.fromJson(Map<String, dynamic> json) {
     return UserDataDto(
       userId: json['user_id']?.toString() ?? '',
@@ -82,6 +95,7 @@ class UserDataDto {
     );
   }
 
+  /// Converts to JSON for saving to local storage.
   Map<String, dynamic> toJson() => {
         'user_id': userId,
         'user_type': userType,

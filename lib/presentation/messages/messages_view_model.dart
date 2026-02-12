@@ -4,6 +4,7 @@ import '../../core/utils/resource.dart';
 import '../../domain/model/contact_domain.dart';
 import '../../domain/usecase/get_contacts_usecase.dart';
 
+/// UiState: An immutable snapshot of everything the Messages screen needs to display.
 class MessagesUiState {
   final bool isLoading;
   final String destinationName;
@@ -23,6 +24,7 @@ class MessagesUiState {
     this.errorMessage,
   });
 
+  /// copyWith: Creates a new copy of the state with some fields changed.
   MessagesUiState copyWith({
     bool? isLoading,
     String? destinationName,
@@ -46,9 +48,11 @@ class MessagesUiState {
   }
 }
 
+/// ChangeNotifier: Tells the UI to rebuild when data changes.
 class MessagesViewModel extends ChangeNotifier {
   final GetContactsUseCase _getContactsUseCase;
 
+  /// Constructor body: Loads contacts immediately when the ViewModel is created.
   MessagesViewModel({required GetContactsUseCase getContactsUseCase})
       : _getContactsUseCase = getContactsUseCase {
     loadContacts();
@@ -69,6 +73,7 @@ class MessagesViewModel extends ChangeNotifier {
           developer.log(
               'Contacts loaded successfully: ${data.reps.length} reps',
               name: 'MessagesViewModel');
+          // Use API data when available; fall back to default emergency numbers
           _uiState = _uiState.copyWith(
             isLoading: false,
             destinationName: data.destinationName,

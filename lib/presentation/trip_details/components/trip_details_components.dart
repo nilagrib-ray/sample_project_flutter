@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../../domain/model/trip_details_domain.dart';
 
+/// A card showing countdown to trip start: Days, Hours, Minutes.
+/// Often used at the top of trip details screen.
 class CountdownCard extends StatelessWidget {
   final int days;
   final int hours;
@@ -38,6 +40,7 @@ class CountdownCard extends StatelessWidget {
   }
 }
 
+/// Internal widget: one value+label pair for the countdown (e.g. "5" + "Days").
 class _CountdownItem extends StatelessWidget {
   final int value;
   final String label;
@@ -62,6 +65,8 @@ class _CountdownItem extends StatelessWidget {
   }
 }
 
+/// A card for actions that need user attention (e.g. "Complete your profile").
+/// Shows orange warning icon, title, and chevron. Tappable via InkWell.
 class ActionRequiredCard extends StatelessWidget {
   final ActionRequired action;
   final VoidCallback? onTap;
@@ -106,6 +111,7 @@ class ActionRequiredCard extends StatelessWidget {
   }
 }
 
+/// A row showing a traveller with avatar, name, and optional "Lead Booker" badge.
 class TravellerCard extends StatelessWidget {
   final Traveller traveller;
 
@@ -148,6 +154,8 @@ class TravellerCard extends StatelessWidget {
   }
 }
 
+/// A card linking to discover a resort/destination. Shows "Discover your resort" + destination name.
+/// Tappable via InkWell.
 class DestinationLinkCard extends StatelessWidget {
   final String destinationName;
   final VoidCallback? onTap;
@@ -206,6 +214,8 @@ class DestinationLinkCard extends StatelessWidget {
   }
 }
 
+/// An orange gradient button card for "Link with friends bookings".
+/// Tappable via InkWell.
 class LinkFriendsCard extends StatelessWidget {
   final VoidCallback? onTap;
   const LinkFriendsCard({super.key, this.onTap});
@@ -241,6 +251,8 @@ class LinkFriendsCard extends StatelessWidget {
   }
 }
 
+/// A row for section headers with icon, title, and optional trailing text or icon.
+/// Used to label sections like "Travellers", "Destination", etc.
 class SectionHeaderRow extends StatelessWidget {
   final IconData icon;
   final String title;
@@ -295,6 +307,8 @@ class SectionHeaderRow extends StatelessWidget {
   }
 }
 
+/// Embeds a Google Map showing the destination location with a marker.
+/// ClipRRect clips the map to rounded corners.
 class DestinationMap extends StatelessWidget {
   final double latitude;
   final double longitude;
@@ -344,6 +358,7 @@ class DestinationMap extends StatelessWidget {
 
 // ── Helper Functions ──────────────────────────────────────────
 
+/// Converts "YYYY-MM-DD" to "DD Month" (e.g. "2025-02-13" → "13 February").
 String formatDateDayMonth(String dateString) {
   try {
     final parts = dateString.split('-');
@@ -365,6 +380,7 @@ String formatDateDayMonth(String dateString) {
   }
 }
 
+/// Extracts year from "YYYY-MM-DD" (e.g. "2025-02-13" → "2025").
 String formatDateYear(String dateString) {
   try {
     final parts = dateString.split('-');
@@ -374,6 +390,7 @@ String formatDateYear(String dateString) {
   }
 }
 
+/// Converts "YYYY-MM-DD" to "DD/MM/YYYY" format.
 String formatDateNumeric(String dateString) {
   try {
     final parts = dateString.split('-');
@@ -386,6 +403,7 @@ String formatDateNumeric(String dateString) {
   }
 }
 
+/// Formats a numeric amount to 2 decimal places. Returns "0.00" if null or empty.
 String formatAmount(String? amount) {
   if (amount == null || amount.isEmpty) return '0.00';
   final value = double.tryParse(amount);

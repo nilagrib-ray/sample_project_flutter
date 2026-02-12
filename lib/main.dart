@@ -5,17 +5,23 @@ import 'di/service_locator.dart';
 import 'domain/repository/auth_repository.dart';
 import 'navigation/app_navigation.dart';
 
+// main() is the entry point: Dart runs this function first when the app starts.
 void main() async {
+  // Required before any async code in main. Ensures Flutter's engine is ready
+  // (e.g. for plugins, native code, or shared preferences).
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize DI (equivalent of Hilt)
+  // Registers all services and repositories. When a screen needs a ViewModel or
+  // repository, it gets it from here instead of creating it manually.
   setupServiceLocator();
 
-  // Check login state
+  // Ask the auth repository if the user is already logged in (e.g. from a
+  // previous session). If true, we skip the login screen and go straight to messages.
   final authRepository = getIt<AuthRepository>();
   final isLoggedIn = await authRepository.isLoggedIn();
 
-  // Set status bar style
+  // Make the status bar (top bar with time, battery) transparent. Use dark icons
+  // so they're visible on light backgrounds.
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
@@ -23,9 +29,12 @@ void main() async {
     ),
   );
 
+  // runApp() starts the Flutter app. Everything you see on screen is built from
+  // the widget tree that starts with SampleApp.
   runApp(SampleApp(isLoggedIn: isLoggedIn));
 }
 
+// Root widget of the app. It builds the MaterialApp and passes the router.
 class SampleApp extends StatelessWidget {
   final bool isLoggedIn;
 
@@ -33,13 +42,20 @@ class SampleApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Router is created with isLoggedIn so it knows where to send the user first.
     final router = createRouter(isLoggedIn: isLoggedIn);
 
+    // MaterialApp.router: a Material Design app that uses GoRouter for navigation
+    // instead of Navigator. The router decides which screen to show based on the URL.
     return MaterialApp.router(
       title: 'Party Hard Travel',
       debugShowCheckedModeBanner: false,
+      // ThemeData: global styling for the whole app. Every screen inherits these
+      // colors, fonts, and component styles unless overridden.
       theme: ThemeData(
         useMaterial3: true,
+        // ColorScheme.fromSeed: generates a full color palette from one seed color.
+        // App bars, buttons, links, etc. use these colors automatically.
         colorScheme: ColorScheme.fromSeed(
           seedColor: const Color(0xFFFF6600),
           brightness: Brightness.light,

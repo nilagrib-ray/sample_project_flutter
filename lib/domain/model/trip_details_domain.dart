@@ -1,3 +1,6 @@
+/// Full details for a single trip (e.g. when user taps on a trip). Contains
+/// everything needed for the trip detail screen: dates, travellers, actions
+/// required, images, coordinates, etc.
 class TripDetailsDomain {
   final int id;
   final int? packageId;
@@ -54,6 +57,8 @@ class TripDetailsDomain {
   });
 }
 
+/// A person on the trip. [isLeadBooker] marks the main contact for the booking.
+/// [email] is optional because not all travellers may have one stored.
 class Traveller {
   final String id;
   final String firstName;
@@ -72,6 +77,8 @@ class Traveller {
   });
 }
 
+/// Something the user needs to do for the trip (e.g. sign a form, upload a
+/// document). [actionType] describes what kind of action it is.
 class ActionRequired {
   final String id;
   final String title;
@@ -86,6 +93,8 @@ class ActionRequired {
   });
 }
 
+/// One day's schedule in the trip itinerary. [events] is the list of things
+/// happening that day; [eventDate] is the date string.
 class ItineraryDomain {
   final List<Event> events;
   final String eventDate;
@@ -96,6 +105,8 @@ class ItineraryDomain {
   });
 }
 
+/// A single event/activity in the itinerary (e.g. "Airport transfer", "Dinner").
+/// Times and location are optional since not every event has them.
 class Event {
   final int id;
   final String title;

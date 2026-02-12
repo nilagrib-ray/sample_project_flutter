@@ -2,8 +2,12 @@ import 'dart:developer' as developer;
 import '../remote/dto/trip_details_dto.dart';
 import '../../domain/model/trip_details_domain.dart';
 
+/// Converts TripDetailsResponse (API format) to TripDetailsDomain (app format).
+/// This is a complex mapper because the API returns travellers in different formats
+/// and may not always include coordinates.
 extension TripDetailsResponseMapper on TripDetailsResponse {
   TripDetailsDomain toDomain() {
+    // Get destination name and image from the first destination in the list
     final destinationName = destination?.isNotEmpty == true
         ? destination!.first.name ?? ''
         : '';
@@ -11,8 +15,10 @@ extension TripDetailsResponseMapper on TripDetailsResponse {
         ? destination!.first.descriptionFeaturedImageUrl
         : null;
 
+    // Calculate how many days until the trip starts
     final daysToGo = _calculateDaysToGo(arrivalDate ?? '');
 
+    // Use API coordinates if available, otherwise fall back to known coordinates by destination name
     final latitude =
         meetingPoint?.lat ?? _getDefaultLatitude(destinationName);
     final longitude =
@@ -22,7 +28,7 @@ extension TripDetailsResponseMapper on TripDetailsResponse {
         'Coordinates: lat=$latitude, lng=$longitude for $destinationName',
         name: 'TripDetailsMapper');
 
-    // Parse travellers (can be list, string, or number)
+    // Travellers can come as a list of objects, a string like "3", or a number like 3
     final travellersList = _parseTravellers(travellers);
 
     return TripDetailsDomain(
@@ -55,12 +61,14 @@ extension TripDetailsResponseMapper on TripDetailsResponse {
     );
   }
 
+  /// Handles travellers whether API sends: list of objects, string count, or number count.
   List<Traveller> _parseTravellers(dynamic travellersData) {
     try {
       if (travellersData == null) {
         return [];
       }
 
+      // Case 1: API sends a list of traveller objects
       if (travellersData is List) {
         return travellersData.map((e) {
           final dto = TravellerDto.fromJson(e as Map<String, dynamic>);
@@ -68,6 +76,7 @@ extension TripDetailsResponseMapper on TripDetailsResponse {
         }).toList();
       }
 
+      // Case 2: API sends a string like "3" - create placeholder travellers
       if (travellersData is String) {
         final count = int.tryParse(travellersData) ?? 0;
         return List.generate(count, (index) {
@@ -82,6 +91,7 @@ extension TripDetailsResponseMapper on TripDetailsResponse {
         });
       }
 
+      // Case 3: API sends a number like 3 - same as string case
       if (travellersData is num) {
         final count = travellersData.toInt();
         return List.generate(count, (index) {
@@ -105,6 +115,7 @@ extension TripDetailsResponseMapper on TripDetailsResponse {
   }
 }
 
+/// Converts TravellerDto to Traveller domain model.
 extension TravellerDtoMapper on TravellerDto {
   Traveller toDomain() {
     final first = firstName ?? '';
@@ -122,6 +133,7 @@ extension TravellerDtoMapper on TravellerDto {
   }
 }
 
+/// Converts ActionRequiredDto to ActionRequired domain model.
 extension ActionRequiredDtoMapper on ActionRequiredDto {
   ActionRequired toDomain() {
     return ActionRequired(
@@ -133,6 +145,7 @@ extension ActionRequiredDtoMapper on ActionRequiredDto {
   }
 }
 
+/// Converts ItineraryResponse (API) to ItineraryDomain (app).
 extension ItineraryResponseMapper on ItineraryResponse {
   ItineraryDomain toDomain() {
     return ItineraryDomain(
@@ -142,6 +155,7 @@ extension ItineraryResponseMapper on ItineraryResponse {
   }
 }
 
+/// Converts EventDto to Event domain model.
 extension EventDtoMapper on EventDto {
   Event toDomain() {
     return Event(
@@ -157,6 +171,7 @@ extension EventDtoMapper on EventDto {
   }
 }
 
+/// Returns hardcoded latitude for popular destinations when API doesn't provide coordinates.
 double _getDefaultLatitude(String destinationName) {
   final name = destinationName.toLowerCase();
   if (name.contains('ayia napa')) return 34.9823;
@@ -171,6 +186,7 @@ double _getDefaultLatitude(String destinationName) {
   return 35.0;
 }
 
+/// Returns hardcoded longitude for popular destinations when API doesn't provide coordinates.
 double _getDefaultLongitude(String destinationName) {
   final name = destinationName.toLowerCase();
   if (name.contains('ayia napa')) return 34.0053;
@@ -185,6 +201,7 @@ double _getDefaultLongitude(String destinationName) {
   return 25.0;
 }
 
+/// Calculates days until trip: parses date string, compares to today, returns difference in days.
 int _calculateDaysToGo(String dateString) {
   try {
     if (dateString.isEmpty) return 0;

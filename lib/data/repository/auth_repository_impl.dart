@@ -5,10 +5,14 @@ import '../remote/dto/login_dto.dart';
 import '../../domain/model/user_domain.dart';
 import '../../domain/repository/auth_repository.dart';
 
+/// Implements = this class fulfills the contract defined by AuthRepository.
+/// The interface says "you must have login, saveUserData, getUserData, etc."
+/// This class provides the actual implementation using API + local storage.
 class AuthRepositoryImpl implements AuthRepository {
   final ApiService _apiService;
   final PreferencesManager _preferencesManager;
 
+  /// Dependencies are injected via constructor - we don't create them here.
   AuthRepositoryImpl({
     required ApiService apiService,
     required PreferencesManager preferencesManager,

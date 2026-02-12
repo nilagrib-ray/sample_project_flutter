@@ -1,6 +1,7 @@
 import '../remote/api_service.dart';
 import '../../domain/repository/contact_repository.dart';
 
+/// Implements ContactRepository - provides the real implementation that fetches contact data from the API.
 class ContactRepositoryImpl implements ContactRepository {
   final ApiService _apiService;
 

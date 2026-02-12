@@ -1,9 +1,9 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'components/profile_action_card.dart';
 import 'profile_view_model.dart';
 
+// StatelessWidget: No local mutable state. Profile data comes from ViewModel.
 class ProfileScreen extends StatelessWidget {
   final VoidCallback onLogout;
 
@@ -36,35 +36,39 @@ class ProfileScreen extends StatelessWidget {
             ],
           ),
           body: SingleChildScrollView(
+            // Column: Arranges elements vertically - avatar, name, buttons, etc.
             child: Column(
               children: [
                 const SizedBox(height: 8),
 
-                // Profile avatar with glow
+                // Profile avatar: Stack creates layered effect - gradient glow
+                // behind, white circle with icon on top. RadialGradient gives
+                // soft glow from center outward.
                 SizedBox(
-                  width: 280,
-                  height: 280,
+                  width: 300,
+                  height: 300,
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
-                      // Blurred gradient glow
                       Container(
-                        width: 200,
-                        height: 200,
+                        width: 300,
+                        height: 300,
                         decoration: const BoxDecoration(
                           shape: BoxShape.circle,
-                          gradient: LinearGradient(
-                            colors: [Color(0xFFFF0099), Color(0xFFFF6600)],
-                          ),
-                        ),
-                        child: ClipOval(
-                          child: BackdropFilter(
-                            filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
-                            child: Container(color: Colors.transparent),
+                          gradient: RadialGradient(
+                            center: Alignment.center,
+                            radius: 0.5,
+                            colors: [
+                              Color(0x50FF6600),
+                              Color(0x40FF3377),
+                              Color(0x25FF0099),
+                              Color(0x08FF0099),
+                              Color(0x00FF0099),
+                            ],
+                            stops: [0.0, 0.35, 0.55, 0.75, 1.0],
                           ),
                         ),
                       ),
-                      // White circle with icon
                       Container(
                         width: 190,
                         height: 190,
@@ -120,6 +124,7 @@ class ProfileScreen extends StatelessWidget {
 
                 const SizedBox(height: 16),
 
+                // Action cards: Each is a tappable row (icon + label + title)
                 ProfileActionCard(
                   label: 'Make a change',
                   title: 'Update Details',
@@ -149,6 +154,7 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
+  // Shows confirmation dialog before logout. Navigator.pop closes the dialog.
   void _showLogoutDialog(BuildContext context, ProfileViewModel viewModel) {
     showDialog(
       context: context,

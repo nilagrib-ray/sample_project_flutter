@@ -2,6 +2,7 @@ import 'dart:developer' as developer;
 import 'package:flutter/foundation.dart';
 import '../../domain/repository/auth_repository.dart';
 
+/// UiState: An immutable snapshot of everything the Profile screen needs to display.
 class ProfileUiState {
   final String userEmail;
   final String userName;
@@ -13,6 +14,7 @@ class ProfileUiState {
     this.profileImage,
   });
 
+  /// copyWith: Creates a new copy of the state with some fields changed.
   ProfileUiState copyWith({
     String? userEmail,
     String? userName,
@@ -26,9 +28,11 @@ class ProfileUiState {
   }
 }
 
+/// ChangeNotifier: Tells the UI to rebuild when data changes.
 class ProfileViewModel extends ChangeNotifier {
   final AuthRepository _authRepository;
 
+  /// Constructor body: Loads user data immediately when the ViewModel is created.
   ProfileViewModel({required AuthRepository authRepository})
       : _authRepository = authRepository {
     _loadUserData();
@@ -37,6 +41,7 @@ class ProfileViewModel extends ChangeNotifier {
   ProfileUiState _uiState = const ProfileUiState();
   ProfileUiState get uiState => _uiState;
 
+  /// _loadUserData: Private method—fetches user info from storage and updates state.
   Future<void> _loadUserData() async {
     final userData = await _authRepository.getUserData();
     if (userData != null) {

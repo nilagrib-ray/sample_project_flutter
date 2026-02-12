@@ -1,8 +1,11 @@
 import '../remote/dto/trip_dto.dart';
 import '../../domain/model/trip_domain.dart';
 
+/// Converts TripDto (API format) to TripDomain (app format).
 extension TripDtoMapper on TripDto {
   TripDomain toDomain() {
+    // destination? = safe access: if destination is null, skip; otherwise use it
+    // destination! = we've checked it's not empty, so ! tells Dart it's safe
     final locationName = destination?.isNotEmpty == true
         ? destination!.first.name ?? ''
         : '';
@@ -10,6 +13,8 @@ extension TripDtoMapper on TripDto {
         ? destination!.first.descriptionFeaturedImageUrl
         : null;
 
+    // ?? = null-coalescing: use left side if not null, otherwise use right side
+    // Example: packageId ?? 0 means "use packageId, or 0 if packageId is null"
     return TripDomain(
       tripId: (packageId ?? bookingId ?? 0).toString(),
       packageId: packageId,
@@ -33,12 +38,14 @@ extension TripDtoMapper on TripDto {
   }
 }
 
+/// Converts a list of TripDto to a list of TripDomain.
 extension TripDtoListMapper on List<TripDto> {
   List<TripDomain> toDomain() {
     return map((dto) => dto.toDomain()).toList();
   }
 }
 
+/// Converts CategoryDto (API format) to DestinationCategory (app format).
 extension CategoryDtoMapper on CategoryDto {
   DestinationCategory toDomain() {
     return DestinationCategory(
@@ -53,6 +60,7 @@ extension CategoryDtoMapper on CategoryDto {
   }
 }
 
+/// Converts a list of CategoryDto to a list of DestinationCategory.
 extension CategoryDtoListMapper on List<CategoryDto> {
   List<DestinationCategory> toDestinationCategories() {
     return map((dto) => dto.toDomain()).toList();

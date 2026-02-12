@@ -4,11 +4,14 @@ import '../../domain/model/contact_domain.dart';
 import 'components/contact_item.dart';
 import 'messages_view_model.dart';
 
+// StatelessWidget: No mutable state stored locally. UI is driven entirely by
+// the ViewModel. Use when the widget doesn't need to track its own changes.
 class MessagesScreen extends StatelessWidget {
   const MessagesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Consumer: Rebuilds when MessagesViewModel notifies listeners.
     return Consumer<MessagesViewModel>(
       builder: (context, viewModel, _) {
         final uiState = viewModel.uiState;
@@ -29,6 +32,7 @@ class MessagesScreen extends StatelessWidget {
           ),
         ];
 
+        // Scaffold: AppBar at top, body below. Standard screen layout.
         return Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(
@@ -50,6 +54,8 @@ class MessagesScreen extends StatelessWidget {
               ),
             ],
           ),
+          // Stack: Overlays widgets on top of each other. Used here to show
+          // loading spinner OR list, plus error card at bottom when needed.
           body: Stack(
             children: [
               if (uiState.isLoading)
@@ -58,6 +64,8 @@ class MessagesScreen extends StatelessWidget {
                       color: Color(0xFFFF6600)),
                 )
               else
+                // ListView: Scrollable list of widgets. Use when content may
+                // extend beyond the screen - user can scroll to see more.
                 ListView(
                   children: [
                     const SizedBox(height: 8),
@@ -128,6 +136,7 @@ class MessagesScreen extends StatelessWidget {
                   ],
                 ),
 
+              // Error card: Positioned at bottom when API fails
               if (uiState.errorMessage != null)
                 Positioned(
                   bottom: 16,
@@ -157,6 +166,7 @@ class MessagesScreen extends StatelessWidget {
   }
 }
 
+// Private widget for empty state - reusable card with message.
 class _EmptyStateCard extends StatelessWidget {
   final String message;
   const _EmptyStateCard(this.message);

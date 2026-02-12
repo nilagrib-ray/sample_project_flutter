@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'components/trip_components.dart';
 import 'trips_view_model.dart';
 
+// StatelessWidget: Trips data comes from TripsViewModel, no local state.
 class TripsScreen extends StatelessWidget {
   final VoidCallback onLogout;
   final void Function(int?, int?, String?) onTripClick;
@@ -41,6 +42,8 @@ class TripsScreen extends StatelessWidget {
                       color: Color(0xFFFF6600)),
                 )
               else
+                // ListView: Scrollable list - sections are Upcoming, Book next,
+                // destinations (horizontal), Previous Trips.
                 ListView(
                   padding: const EdgeInsets.symmetric(vertical: 20),
                   children: [
@@ -62,7 +65,7 @@ class TripsScreen extends StatelessWidget {
                     if (uiState.upcomingTrips.isNotEmpty)
                       const SizedBox(height: 8),
 
-                    // Book next trip section
+                    // Row: Arranges children horizontally (icon + text).
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Row(
@@ -83,6 +86,8 @@ class TripsScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 12),
 
+                    // ListView.separated with horizontal scroll: Destination
+                    // cards scroll left/right. scrollDirection: Axis.horizontal.
                     if (uiState.destinations.isEmpty)
                       const EmptyStateCard('No trips available')
                     else
@@ -93,7 +98,7 @@ class TripsScreen extends StatelessWidget {
                           padding:
                               const EdgeInsets.symmetric(horizontal: 20),
                           itemCount: uiState.destinations.length,
-                          separatorBuilder: (_, __) =>
+                          separatorBuilder: (_, _) =>
                               const SizedBox(width: 16),
                           itemBuilder: (_, index) => DestinationCard(
                             destination: uiState.destinations[index],
